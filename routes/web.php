@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LaporanController;
-use App\Http\Controllers\LokasiController;
+use App\Http\Controllers\Admin\LokasiController;
 use Illuminate\Support\Facades\Route;
 
 // Halaman Depan

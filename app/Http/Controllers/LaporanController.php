@@ -34,11 +34,12 @@ class LaporanController extends Controller
             'foto_bukti' => 'required|mimes:jpg,jpeg,png,pdf|max:2048', 
         ]);
 
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput(); 
+        // Cek: Apakah request ini datang dari AJAX?
+        if ($request->ajax()) {
+        return response()->json(['status' => 'success', 'msg' => 'Laporan Berhasil Dikirim!']);
         }
+        // Kalau bukan AJAX (submit biasa), lakukan cara lama
+        return redirect()->back()->with('success', 'Laporan Berhasil Dikirim!');
 
         $path = $request->file('foto_bukti')->store('bukti_banjir', 'public');
 
@@ -91,7 +92,6 @@ class LaporanController extends Controller
             $laporan->foto_bukti = $path;
         }
 
-        // PANGGIL FUNGSI MANUAL LAGI
         $status = $this->hitungRisikoManual($request->ketinggian_air);
 
         $laporan->update([

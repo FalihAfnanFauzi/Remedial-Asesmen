@@ -140,4 +140,38 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+<script>
+    $('#formLaporan').on('submit', function(e) {
+        e.preventDefault(); // Tahan reload browser
+        
+        let tombol = $(this).find('button[type="submit"]');
+        let textAsli = tombol.html();
+        
+        // 1. Ubah tombol jadi Loading
+        tombol.html('<i class="fa fa-spinner fa-spin"></i> Mengirim...').prop('disabled', true);
+
+        // 2. Kirim Data via AJAX
+        $.ajax({
+            url: "{{ route('laporan.store') }}",
+            method: "POST",
+            data: new FormData(this),
+            contentType: false,
+            cache: false,
+            processData: false,
+            success: function(response) {
+                // Kalau sukses
+                alert(response.msg); 
+                location.reload(); // Refresh halaman biar data baru muncul
+            },
+            error: function(xhr) {
+                // Kalau gagal
+                alert('Gagal mengirim laporan. Pastikan semua input terisi.');
+                tombol.html(textAsli).prop('disabled', false); // Kembalikan tombol
+            }
+        });
+    });
+</script>
+@endpush
 @endsection
